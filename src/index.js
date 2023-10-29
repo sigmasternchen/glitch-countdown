@@ -1,4 +1,6 @@
 (function() {
+    var countdown = null;
+
     const parts = {
         "days": {
             "next": null,
@@ -68,8 +70,37 @@
         };
     }
 
+    const start = function() {
+        state.total = parseTime();
+        state.current = state.total;
+        state.counting = true;
+
+        countdown.classList.add("counting");
+
+        var part = "seconds";
+        while(part) {
+            const partObj = parts[part];
+            partObj.input.disabled = true;
+            part = partObj.next;
+        }
+    }
+
+    const stop = function() {
+        state.counting = false;
+
+        countdown.classList.remove("counting");
+
+        var part = "seconds";
+        while(part) {
+            const partObj = parts[part];
+            partObj.input.disabled = false;
+            part = partObj.next;
+        }
+    }
+
     window.addEventListener("load", function() {
-        Array.from(document.getElementById("countdown").getElementsByClassName("part")).forEach(element => {
+        countdown = document.getElementById("countdown");
+        Array.from(countdown.getElementsByClassName("part")).forEach(element => {
             const part = parts[element.id];
             part.element = element;
             part.input = element.getElementsByTagName("input")[0];
@@ -117,11 +148,7 @@
             });
         });
 
-        document.getElementById("start").addEventListener("click", function() {
-            state.total = parseTime();
-            state.current = state.total;
-            state.counting = true;
-        });
+        document.getElementById("start").addEventListener("click", start);
 
         window.setInterval(function() {
             if (state.counting) {
@@ -130,7 +157,7 @@
                 update(state.current);
 
                 if (state.current == 0) {
-                    state.counting = false;
+                    stop();
                 }
             }
         }, 1000);

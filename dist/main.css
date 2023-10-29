@@ -44,3 +44,7 @@ body {
 #countdown .down {
     top: calc(3.3vw + 0.2vw);
 }
+
+#countdown.counting .up, #countdown.counting .down {
+    display: none;
+}
