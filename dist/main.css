@@ -1,0 +1,25 @@
+body {
+    background-color: black;
+}
+
+#countdown {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50vw;
+    height: 8vw;
+    background-color: grey;
+}
+
+#countdown div {
+    display: inline-block;
+}
+
+#countdown * {
+    font-size: 3vw;
+}
+
+#countdown input {
+    width: 6vw;
+}
