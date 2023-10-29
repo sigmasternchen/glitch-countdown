@@ -12,8 +12,10 @@ body {
     background-color: grey;
 }
 
-#countdown div {
+#countdown .part {
     display: inline-block;
+    position: relative;
+    padding-top: 1vw;
 }
 
 #countdown * {
@@ -22,4 +24,23 @@ body {
 
 #countdown input {
     width: 6vw;
+    height: 3.3vw;
+}
+
+#countdown .up, #countdown .down {
+    position: absolute;
+    line-height: 3vw;
+    width: 1vw;
+    text-align: center;
+    left: calc(50% - 0.5vw);
+    transform: rotate(90deg);
+    cursor: pointer;
+}
+
+#countdown .up {
+    top: calc(-1vw - 0.2vw);
+}
+
+#countdown .down {
+    top: calc(3.3vw + 0.2vw);
 }
