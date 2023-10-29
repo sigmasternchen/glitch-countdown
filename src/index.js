@@ -1,12 +1,10 @@
 (function() {
-    var counting = false;
-
     const parts = {
         "days": {
             "next": null,
             "prev": "hours",
             "value": 0,
-            "maxValue": 999,
+            "maxValue": 1000,
             "element": null,
             "input": null,
         },
@@ -34,6 +32,40 @@
             "element": null,
             "input": null,
         },
+    };
+
+    const state = {
+        "counting": false,
+        "total": 0,
+        "current": 0,
+    };
+
+    const parseTime = function() {
+        var total = 0;
+
+        var part = "days";
+        while (part) {
+            const partObj = parts[part];
+            total *= partObj.maxValue;
+            total += partObj.value;
+
+            part = partObj.prev;
+        };
+        return total;
+    }
+
+    const update = function(value) {
+        
+        var part = "seconds";
+        while (part) {
+            const partObj = parts[part];
+            const maxValue = partObj.maxValue;
+            partObj.value = value % maxValue;
+            partObj.input.value = partObj.value;
+            value = Math.floor(value / maxValue);
+
+            part = partObj.next;
+        };
     }
 
     window.addEventListener("load", function() {
@@ -57,7 +89,7 @@
                         if (Math.abs(value - part.value) == 1) {
                             part.input.value = 0;
                         } else {
-                            part.input.value = part.maxValue;
+                            part.input.value = part.maxValue - 1;
                         }
                     }
                 } else if (value < 0) {
@@ -66,7 +98,7 @@
                         parts[part.next].input.value = parseInt(parts[part.next].input.value) + Math.floor(value / part.maxValue);
                         parts[part.next].input.dispatchEvent(new FocusEvent("blur"));
                     } else {
-                        part.input.value = part.maxValue;
+                        part.input.value = part.maxValue - 1;
                     }
                 } else {
                     part.input.value = value;
@@ -84,5 +116,23 @@
                 part.input.dispatchEvent(new FocusEvent("blur"));
             });
         });
+
+        document.getElementById("start").addEventListener("click", function() {
+            state.total = parseTime();
+            state.current = state.total;
+            state.counting = true;
+        });
+
+        window.setInterval(function() {
+            if (state.counting) {
+                console.log(state.current);
+                state.current--;
+                update(state.current);
+
+                if (state.current == 0) {
+                    state.counting = false;
+                }
+            }
+        }, 1000);
     });
 })();
