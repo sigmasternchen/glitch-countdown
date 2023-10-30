@@ -78,6 +78,8 @@ header h2:after {
 
 #countdown .separator {
     font-size: 12vw;
+    opacity: 1;
+    transition: opacity 0.1s;
 }
 
 #countdown.blink .separator {
@@ -89,8 +91,14 @@ header h2:after {
     text-align: center;
     height: 9.6vw;
     background: transparent;
-    border: solid;
+    border: solid white;
+    transition: border 0.2s;
     font-variant-numeric: tabular-nums;
+    box-sizing: border-box;
+}
+
+#countdown.counting input {
+    border: black;
 }
 
 #countdown #days input {
@@ -154,6 +162,8 @@ header h2:after {
     line-height: 9vw;
     width: 3.5vw;
     text-align: center;
+    transition: opacity 0.2s;
+    opacity: 1;
     left: calc(50% - 1.5vw);
     transform: rotate(90deg);
     cursor: pointer;
@@ -169,7 +179,7 @@ header h2:after {
 
 #countdown.counting .up,
 #countdown.counting .down {
-    display: none;
+    opacity: 0;
 }
 
 
