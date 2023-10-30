@@ -1,5 +1,6 @@
 (function() {
     var countdown = null;
+    var startButton = null;
 
     const parts = {
         "days": {
@@ -42,6 +43,10 @@
         "current": 0,
     };
 
+    const convertToDisplayValue = function(raw, part) {
+        return raw.toString().padStart((parts[part].maxValue - 1).toString().length, "0");
+    }
+
     const parseTime = function() {
         var total = 0;
 
@@ -62,12 +67,19 @@
         while (part) {
             const partObj = parts[part];
             const maxValue = partObj.maxValue;
-            partObj.value = value % maxValue;
-            partObj.input.value = partObj.value;
+            const positionValue = value % maxValue;
+            partObj.value = positionValue;
+            partObj.input.value = convertToDisplayValue(positionValue, part);
             value = Math.floor(value / maxValue);
 
             part = partObj.next;
         };
+    }
+
+    const setButtonText = function(text) {
+        Array.from(startButton.getElementsByTagName("span")).forEach(elem => {
+            elem.innerText = text;
+        });
     }
 
     const start = function() {
@@ -76,6 +88,7 @@
         state.counting = true;
 
         countdown.classList.add("counting");
+        setButtonText("reset");
 
         var part = "seconds";
         while(part) {
@@ -89,6 +102,7 @@
         state.counting = false;
 
         countdown.classList.remove("counting");
+        setButtonText("start");
 
         var part = "seconds";
         while(part) {
@@ -100,6 +114,8 @@
 
     window.addEventListener("load", function() {
         countdown = document.getElementById("countdown");
+        startButton = document.getElementById("start");
+
         Array.from(countdown.getElementsByClassName("part")).forEach(element => {
             const part = parts[element.id];
             part.element = element;
@@ -110,31 +126,33 @@
             });
             part.input.addEventListener("blur", function(event) {
                 const value = parseInt(part.input.value);
+                var correctedValue = 0;
                 if (value >= part.maxValue) {
                     if (part.next) {
-                        part.input.value = value % part.maxValue;
+                        correctedValue = value % part.maxValue;
                         parts[part.next].input.value = parseInt(parts[part.next].input.value) + Math.floor(value / part.maxValue);
                         parts[part.next].input.dispatchEvent(new FocusEvent("blur"));
                     } else {
                         // ugly hack to only reset to 0 if the blur event was caused by cascading changes
                         if (Math.abs(value - part.value) == 1) {
-                            part.input.value = 0;
+                            correctedValue = 0;
                         } else {
-                            part.input.value = part.maxValue - 1;
+                            correctedValue = part.maxValue - 1;
                         }
                     }
                 } else if (value < 0) {
                     if (part.next) {
-                        part.input.value = value + part.maxValue * Math.ceil(-value / part.maxValue);
+                        correctedValue = value + part.maxValue * Math.ceil(-value / part.maxValue);
                         parts[part.next].input.value = parseInt(parts[part.next].input.value) + Math.floor(value / part.maxValue);
                         parts[part.next].input.dispatchEvent(new FocusEvent("blur"));
                     } else {
-                        part.input.value = part.maxValue - 1;
+                        correctedValue = part.maxValue - 1;
                     }
                 } else {
-                    part.input.value = value;
+                    correctedValue = value;
                 }
-                part.value = parseInt(part.input.value);
+                part.value = correctedValue;
+                part.input.value = convertToDisplayValue(correctedValue, element.id);
             });
 
             element.getElementsByClassName("up")[0].addEventListener("click", function(event) {
@@ -148,7 +166,14 @@
             });
         });
 
-        document.getElementById("start").addEventListener("click", start);
+        document.getElementById("start").addEventListener("click", function() {
+            if (state.counting) {
+                update(state.total);
+                stop();
+            } else {
+                start();
+            }
+        });
 
         window.setInterval(function() {
             if (state.counting) {
@@ -156,9 +181,18 @@
                 state.current--;
                 update(state.current);
 
-                if (state.current == 0) {
+                if (state.current <= 0) {
+                    update(0);
                     stop();
                 }
+
+                if (countdown.classList.contains("blink")) {
+                    countdown.classList.remove("blink");
+                } else {
+                    countdown.classList.add("blink");
+                }
+            } else {
+                countdown.classList.remove("blink");
             }
         }, 1000);
     });
