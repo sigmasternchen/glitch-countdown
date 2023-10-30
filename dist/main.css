@@ -5,12 +5,54 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: "SourceCodePro";
+    src: url('fonts/SourceCodePro-Italic-VariableFont_wght.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
 * {
     font-family: "SourceCodePro", sans-serif;
 }
 
 body {
     background-color: black;
+}
+
+header h1,
+header h2 {
+    display: inline-block;
+    font-size: 5vw;
+    color: white;
+    margin: 0;
+}
+
+header h1 {}
+
+header h2 {
+    font-style: italic;
+    color: grey;
+    animation: glitchTitle 1s linear infinite;
+}
+
+header h2:before, header h2:after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+}
+
+header h2:before {
+    animation: glitchTop 1s linear infinite;
+    clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+    -webkit-clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+}
+
+header h2:after {
+    z-index: -1;
+    animation: glitchBottom 1.5s linear infinite;
+    clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+    -webkit-clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
 }
 
 #countdown {
@@ -71,7 +113,7 @@ body {
     background-color: black;
     border: 1px white solid;
     text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff,
-    0.025em 0.04em 0 #fffc00;
+        0.025em 0.04em 0 #fffc00;
     animation: glitch 725ms infinite;
 }
 
@@ -94,7 +136,7 @@ body {
     transform: translate(-0.04em, -0.03em);
     opacity: 0.75;
 }
-  
+
 #countdown button .layer:last-of-type {
     animation: glitch 375ms infinite;
     clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
@@ -106,7 +148,8 @@ body {
     background: transparent;
 }
 
-#countdown .up, #countdown .down {
+#countdown .up,
+#countdown .down {
     position: absolute;
     line-height: 9vw;
     width: 3.5vw;
@@ -124,39 +167,97 @@ body {
     top: calc(10vw + 0.6vw);
 }
 
-#countdown.counting .up, #countdown.counting .down {
+#countdown.counting .up,
+#countdown.counting .down {
     display: none;
 }
 
 
 @keyframes glitch {
     0% {
-      text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff,
-        0.025em 0.04em 0 #fffc00;
+        text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff,
+            0.025em 0.04em 0 #fffc00;
     }
+
     15% {
-      text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff,
-        0.025em 0.04em 0 #fffc00;
+        text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff,
+            0.025em 0.04em 0 #fffc00;
     }
+
     16% {
-      text-shadow: -0.05em -0.025em 0 #00fffc, 0.025em 0.035em 0 #fc00ff,
-        -0.05em -0.05em 0 #fffc00;
+        text-shadow: -0.05em -0.025em 0 #00fffc, 0.025em 0.035em 0 #fc00ff,
+            -0.05em -0.05em 0 #fffc00;
     }
+
     49% {
-      text-shadow: -0.05em -0.025em 0 #00fffc, 0.025em 0.035em 0 #fc00ff,
-        -0.05em -0.05em 0 #fffc00;
+        text-shadow: -0.05em -0.025em 0 #00fffc, 0.025em 0.035em 0 #fc00ff,
+            -0.05em -0.05em 0 #fffc00;
     }
+
     50% {
-      text-shadow: 0.05em 0.035em 0 #00fffc, 0.03em 0 0 #fc00ff,
-        0 -0.04em 0 #fffc00;
+        text-shadow: 0.05em 0.035em 0 #00fffc, 0.03em 0 0 #fc00ff,
+            0 -0.04em 0 #fffc00;
     }
+
     99% {
-      text-shadow: 0.05em 0.035em 0 #00fffc, 0.03em 0 0 #fc00ff,
-        0 -0.04em 0 #fffc00;
+        text-shadow: 0.05em 0.035em 0 #00fffc, 0.03em 0 0 #fc00ff,
+            0 -0.04em 0 #fffc00;
     }
+
     100% {
-      text-shadow: -0.05em 0 0 #00fffc, -0.025em -0.04em 0 #fc00ff,
-        -0.04em -0.025em 0 #fffc00;
+        text-shadow: -0.05em 0 0 #00fffc, -0.025em -0.04em 0 #fc00ff,
+            -0.04em -0.025em 0 #fffc00;
     }
-  }
-  
+}
+
+
+@keyframes glitchTitle {
+
+    2%,
+    64% {
+        transform: translate(2px, 0) skew(0deg);
+    }
+
+    4%,
+    60% {
+        transform: translate(-2px, 0) skew(0deg);
+    }
+
+    62% {
+        transform: translate(0, 0) skew(5deg);
+    }
+}
+
+@keyframes glitchTop {
+
+    2%,
+    64% {
+        transform: translate(2px, -2px);
+    }
+
+    4%,
+    60% {
+        transform: translate(-2px, 2px);
+    }
+
+    62% {
+        transform: translate(13px, -1px) skew(-13deg);
+    }
+}
+
+@keyframes glitchBottom {
+
+    2%,
+    64% {
+        transform: translate(-2px, 0);
+    }
+
+    4%,
+    60% {
+        transform: translate(-2px, 0);
+    }
+
+    62% {
+        transform: translate(-22px, 5px) skew(21deg);
+    }
+}
